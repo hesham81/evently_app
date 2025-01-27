@@ -1,7 +1,12 @@
+import '/core/extensions/dimensions.dart';
 import 'package:flutter/widgets.dart';
 
-extension gapSpace on num
-{
-  Widget get hSpace => SizedBox(width: this.toDouble(),);
-  Widget get vSpace => SizedBox(height: this.toDouble(),);
+extension gapSpace on num {
+  Widget get verSpace => SizedBox(
+        width: this.toDouble().width,
+      );
+
+  Widget get horSpace => SizedBox(
+        height: this.toDouble().height,
+      );
 }

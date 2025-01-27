@@ -1,13 +1,16 @@
+import 'package:evently/core/extensions/dimensions.dart';
 import 'package:flutter/cupertino.dart';
 
 extension paddingOnNumbers on Widget {
-  Widget hPadding(double value) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: value),
+  Widget verPadding(double value) => Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: value.width,
+        ),
         child: this,
       );
 
-  Widget vPadding(double value) => Padding(
-        padding: EdgeInsets.symmetric(vertical: value),
+  Widget horPadding(double value) => Padding(
+        padding: EdgeInsets.symmetric(vertical: value.height),
         child: this,
       );
 
