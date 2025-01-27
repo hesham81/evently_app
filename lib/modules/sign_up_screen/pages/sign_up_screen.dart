@@ -1,9 +1,10 @@
-import 'package:evently/core/constant/app_assets.dart';
-import 'package:evently/core/extensions/extensions.dart';
-import 'package:evently/core/theme/app_colors.dart';
-import 'package:evently/core/widget/custom_elevated_button.dart';
-import 'package:evently/core/widget/custom_text_button.dart';
-import 'package:evently/core/widget/custom_text_form_field.dart';
+import '/core/validations/validations.dart';
+import '/core/constant/app_assets.dart';
+import '/core/extensions/extensions.dart';
+import '/core/theme/app_colors.dart';
+import '/core/widget/custom_elevated_button.dart';
+import '/core/widget/custom_text_button.dart';
+import '/core/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -13,6 +14,11 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var emailController = TextEditingController();
+    var passwordController = TextEditingController();
+    var rePasswordController = TextEditingController();
+    var nameController = TextEditingController();
+    var formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -27,82 +33,99 @@ class SignUpScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Image.asset(
-            AppAssets.logo,
-          ).centerWidget(),
-          0.05.horSpace,
-          CustomTextFormField(
-            hintText: "Name",
-            prefixIcon: ImageIcon(
-              AssetImage(
-                AppAssets.avatar,
-              ),
-              color: AppColors.greyColor,
-            ).allPadding(10.2),
-          ),
-          0.02.horSpace,
-          CustomTextFormField(
-            hintText: "Email",
-            prefixIcon: ImageIcon(
-              AssetImage(
-                AppAssets.email,
-              ),
-              color: AppColors.greyColor,
-            ).allPadding(10.2),
-          ),
-          0.02.horSpace,
-          CustomTextFormField(
-            isPassword: true,
-            hintText: "Password",
-          ),
-          0.02.horSpace,
-          CustomTextFormField(
-            isPassword: true,
-            hintText: "Re-Password",
-          ),
-          0.02.horSpace,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 0.065.height,
-                child: CustomElevatedButton(
-                  callBack: () {},
-                  text: Text(
-                    "Create Account",
-                    style: TextStyle(
-                      color: AppColors.whiteColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ).verPadding(0.02),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Already have an account?",
-                style: TextStyle(
-                  color: AppColors.titleBlackColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+      body: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            Image.asset(
+              AppAssets.logo,
+            ).centerWidget(),
+            0.05.horSpace,
+            CustomTextFormField(
+              controller: nameController,
+              hintText: "Name",
+              validator: (value) =>
+                  Validations.isNameValid(nameController.text),
+              prefixIcon: ImageIcon(
+                AssetImage(
+                  AppAssets.avatar,
                 ),
-              ),
-              CustomTextButton(
-                text: "Login",
-                callBack: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        ],
-      ).verPadding(0.02),
+                color: AppColors.greyColor,
+              ).allPadding(10.2),
+            ),
+            0.02.horSpace,
+            CustomTextFormField(
+              controller: emailController,
+              hintText: "Email",
+              validator: (value) =>
+                  Validations.isEmailValid(emailController.text),
+              prefixIcon: ImageIcon(
+                AssetImage(
+                  AppAssets.email,
+                ),
+                color: AppColors.greyColor,
+              ).allPadding(10.2),
+            ),
+            0.02.horSpace,
+            CustomTextFormField(
+              controller: passwordController,
+              isPassword: true,
+              hintText: "Password",
+              validator: (value) =>
+                  Validations.isPasswordValid(passwordController.text),
+            ),
+            0.02.horSpace,
+            CustomTextFormField(
+              controller: rePasswordController,
+              isPassword: true,
+              validator: (value) => Validations.rePasswordValid(
+                  passwordController.text, rePasswordController.text),
+              hintText: "Re-Password",
+            ),
+            0.02.horSpace,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 0.065.height,
+                  child: CustomElevatedButton(
+                    callBack: () {
+                      if (formKey.currentState!.validate()) {}
+                    },
+                    text: Text(
+                      "Create Account",
+                      style: TextStyle(
+                        color: AppColors.whiteColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ).verPadding(0.02),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have an account?",
+                  style: TextStyle(
+                    color: AppColors.titleBlackColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                CustomTextButton(
+                  text: "Login",
+                  callBack: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ).verPadding(0.02),
+      ),
     );
   }
 }

@@ -15,4 +15,16 @@ abstract class Validations {
     }
     return null;
   }
+  static isNameValid(String name) {
+    if (name.isEmpty) {
+      return "Please enter your name";
+    }
+    return null;
+  }
+  static rePasswordValid(String password, String rePassword) {
+    if (password != rePassword) {
+      return "Password does not match";
+    }
+    return null;
+  }
 }
