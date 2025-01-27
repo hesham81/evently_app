@@ -3,6 +3,8 @@ import 'package:evently/core/extensions/extensions.dart';
 import 'package:evently/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
+typedef validation = String? Function(String?);
+
 class CustomTextFormField extends StatefulWidget {
   final double radius;
   final Color? borderColor;
@@ -12,6 +14,7 @@ class CustomTextFormField extends StatefulWidget {
   final String? hintText;
   final TextStyle? hintStyle;
   final TextEditingController? controller;
+  final validation? validator;
 
   const CustomTextFormField({
     super.key,
@@ -23,6 +26,7 @@ class CustomTextFormField extends StatefulWidget {
     required this.hintText,
     this.hintStyle,
     this.controller,
+    this.validator,
   });
 
   @override
@@ -35,7 +39,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
+      validator: widget.validator,
       controller: widget.controller,
       obscureText: visible,
       obscuringCharacter: "*",
