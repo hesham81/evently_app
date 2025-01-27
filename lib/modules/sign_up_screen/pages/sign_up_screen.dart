@@ -1,3 +1,8 @@
+import 'package:evently/core/utils/firebase_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import '../../../core/services/snack_bar.dart';
 import '/core/validations/validations.dart';
 import '/core/constant/app_assets.dart';
 import '/core/extensions/extensions.dart';
@@ -89,8 +94,27 @@ class SignUpScreen extends StatelessWidget {
                 SizedBox(
                   height: 0.065.height,
                   child: CustomElevatedButton(
-                    callBack: () {
-                      if (formKey.currentState!.validate()) {}
+                    callBack: () async {
+                      if (formKey.currentState!.validate()) {
+                        EasyLoading.show();
+                        UserCredential? userCredential =
+                            await FirebaseServices.signUp(emailController.text,
+                                    passwordController.text)
+                                .then(
+                          (value) {
+                            EasyLoading.dismiss();
+                          },
+                        );
+
+                        if (userCredential != null) {
+                          SnackBarService.showSuccessMessage(
+                              "Account Created Successfully");
+                          Navigator.pop(context);
+                        } else {
+                          SnackBarService.showErrorMessage(
+                              "Account Not Created");
+                        }
+                      }
                     },
                     text: Text(
                       "Create Account",
