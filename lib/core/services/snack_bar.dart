@@ -72,6 +72,7 @@ abstract class SnackBarService {
                   msg,
                   style: TextStyle(
                     color: Colors.white,
+                    overflow: TextOverflow.ellipsis
                   ),
                 ).centerRightWidget(),
               ],
