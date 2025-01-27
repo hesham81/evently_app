@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:evently/core/theme/app_theme.dart';
 import 'package:evently/modules/splash_screen/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.routeName,
       theme: AppTheme.lightTheme(),
+      builder: BotToastInit(),
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
         SignInScreen.routeName: (context) => const SignInScreen(),

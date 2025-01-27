@@ -1,10 +1,9 @@
-import 'package:evently/core/validations/validations.dart';
-import 'package:evently/modules/sign_in_screen/widget/word_divider_widget.dart';
-
+import '/core/services/snack_bar.dart';
+import '/core/validations/validations.dart';
+import '/modules/sign_in_screen/widget/word_divider_widget.dart';
 import '/core/widget/custom_elevated_button.dart';
 import '/core/widget/custom_text_button.dart';
 import '/core/widget/custom_text_form_field.dart';
-
 import '/core/constant/app_assets.dart';
 import '/core/extensions/extensions.dart';
 import '/core/theme/app_colors.dart';
@@ -34,7 +33,7 @@ class SignInScreen extends StatelessWidget {
               ),
               0.03.horSpace,
               CustomTextFormField(
-                validator: (value){
+                validator: (value) {
                   return Validations.isEmailValid(emailController.text);
                 },
                 controller: emailController,
@@ -45,7 +44,7 @@ class SignInScreen extends StatelessWidget {
                 isPassword: true,
                 hintText: 'Password',
                 controller: passwordController,
-                validator: (value){
+                validator: (value) {
                   return Validations.isPasswordValid(passwordController.text);
                 },
               ),
@@ -68,7 +67,15 @@ class SignInScreen extends StatelessWidget {
                         ),
                       ),
                       callBack: () {
-                        if (key.currentState!.validate()) {}
+                        if (key.currentState!.validate()) {
+                          SnackBarService.showSuccessMessage(
+                            'Login Successfully',
+                          );
+                        } else {
+                          SnackBarService.showSuccessMessage(
+                            'Please Enter Valid Data',
+                          );
+                        }
                       },
                     ),
                   ),
