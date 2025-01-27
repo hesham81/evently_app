@@ -9,7 +9,7 @@ class CustomTextFormField extends StatefulWidget {
   final double radius;
   final Color? borderColor;
   final Icon? suffixIcon;
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
   final bool isPassword;
   final String? hintText;
   final TextStyle? hintStyle;

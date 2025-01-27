@@ -4,6 +4,7 @@ import 'package:evently/modules/splash_screen/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'modules/sign_in_screen/pages/sign_in_screen.dart';
+import 'modules/sign_up_screen/pages/sign_up_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
         SignInScreen.routeName: (context) => const SignInScreen(),
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
       },
     );
   }

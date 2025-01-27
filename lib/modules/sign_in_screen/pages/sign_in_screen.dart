@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
+import '../../sign_up_screen/pages/sign_up_screen.dart';
 import '/core/utils/firebase_services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '/core/services/snack_bar.dart';
@@ -109,7 +109,9 @@ class SignInScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       decorationColor: AppColors.secondary,
                     ),
-                    callBack: () {},
+                    callBack: () {
+                      Navigator.pushNamed(context, SignUpScreen.routeName);
+                    },
                   ),
                 ],
               ),
