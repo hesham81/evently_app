@@ -1,4 +1,7 @@
-import 'package:evently/core/utils/firebase_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '/core/utils/firebase_services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '/core/services/snack_bar.dart';
 import '/core/validations/validations.dart';
 import '/modules/sign_in_screen/widget/word_divider_widget.dart';
@@ -68,17 +71,18 @@ class SignInScreen extends StatelessWidget {
                         ),
                       ),
                       callBack: () async {
+                        EasyLoading.show();
                         if (key.currentState!.validate()) {
-                          var status = await FirebaseServices.login(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                          if (status == true) {
-                            SnackBarService.showSuccessMessage("Welcome Back");
+                          UserCredential? user = await FirebaseServices.signIn(
+                                  emailController.text, passwordController.text)
+                              .then((v) {
+                            EasyLoading.dismiss();
+                          });
+                          if (user != null) {
+                            SnackBarService.showSuccessMessage(
+                                'Login Successfully');
                           } else {
-                            SnackBarService.showErrorMessage(
-                              "invalid email or password",
-                            );
+                            SnackBarService.showErrorMessage('Login Failed');
                           }
                         }
                       },

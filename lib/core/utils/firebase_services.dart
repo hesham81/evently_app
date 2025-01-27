@@ -1,27 +1,75 @@
-import 'package:evently/core/services/snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class FirebaseServices {
-  static Future<bool?> login({
-    required String email,
-    required String password,
-  }) async {
+  static bool validation = false;
+
+  static Future<UserCredential?> signUp(String email, String password) async {
     try {
-      UserCredential? user =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final UserCredential userCredential =
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return Future.value(true);
+      var user = userCredential.user;
+      await user?.sendEmailVerification();
+      validation = true;
+      return userCredential; // Return UserCredential for further actions
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        return Future.value(false);
-      } else if (e.code == 'wrong-password') {
-        return Future.value(false);
-      }
+      handleFirebaseAuthException(e);
+      validation = false;
+
+      return null;
+
+      // Indicate failure
     } catch (e) {
-      return Future.value(false);
+      validation = false;
+
+      print(e); // Log other unexpected errors
+      return null;
     }
-    return null;
+  }
+
+  static Future<UserCredential?> signIn(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      validation = true;
+
+      return userCredential; // Return UserCredential for further actions
+    } on FirebaseAuthException catch (e) {
+      handleFirebaseAuthException(e);
+      validation = false;
+
+      return null; // Indicate failure
+    } catch (e) {
+      validation = false;
+
+      print(e); // Log other unexpected errors
+      return null;
+    }
+  }
+
+  static forgetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      handleFirebaseAuthException(e);
+    } catch (e) {
+      print(e); // Log other unexpected errors
+    }
+  }
+
+  static void handleFirebaseAuthException(FirebaseAuthException e) {
+    if (e.code == 'weak-password') {
+      print('The password provided is too weak.');
+    } else if (e.code == 'email-already-in-use') {
+      print('The account already exists for that email.');
+    } else if (e.code == 'user-not-found') {
+      print('No user found for that email.');
+    } else if (e.code == 'wrong-password') {
+      print('Wrong password provided for that user.');
+    } else {
+      print('An unexpected Firebase error occurred: ${e.code}');
+    }
   }
 }

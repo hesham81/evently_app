@@ -34,14 +34,14 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  var visible = false;
+  var visible = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: widget.validator,
       controller: widget.controller,
-      obscureText: visible,
+      obscureText: (widget.isPassword) ? visible : false,
       obscuringCharacter: "*",
       cursorColor: AppColors.secondary,
       decoration: InputDecoration(
