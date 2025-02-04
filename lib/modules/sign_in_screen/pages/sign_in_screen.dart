@@ -1,3 +1,5 @@
+import 'package:evently/modules/home_screen/pages/home.dart';
+
 import '/core/constant/shared_preferences_key.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -98,10 +100,9 @@ class _SignInScreenState extends State<SignInScreen> {
                               );
                               SharedPreferences pref =
                                   await SharedPreferences.getInstance();
-                              pref.setBool(SharedPreferencesKey.isLogin, true);
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
-                                '/home',
+                                Home.routeName,
                                 (route) => false,
                               );
                             } else {
@@ -113,30 +114,36 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don’t Have Account ? ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: AppColors.blackColor,
-                      ),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don’t Have Account ? ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: AppColors.blackColor,
+                          ),
+                        ),
+                        CustomTextButton(
+                          text: 'Create Account',
+                          textStyle: TextStyle(
+                            color: AppColors.secondary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            decorationColor: AppColors.secondary,
+                          ),
+                          callBack: () {
+                            Navigator.pushNamed(
+                                context, SignUpScreen.routeName);
+                          },
+                        ),
+                      ],
                     ),
-                    CustomTextButton(
-                      text: 'Create Account',
-                      textStyle: TextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        decorationColor: AppColors.secondary,
-                      ),
-                      callBack: () {
-                        Navigator.pushNamed(context, SignUpScreen.routeName);
-                      },
-                    ),
-                  ],
+                  ),
                 ),
                 WordDividerWidget(
                   text: 'Or',
@@ -145,7 +152,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(
                   height: 0.07.height,
                   child: CustomElevatedButton(
-                    callBack: () {},
+                    callBack: () {
+                      Future<Null> response =
+                          FirebaseAuthServices.signInWithGoogle(context)
+                              .then((value) {});
+                    },
                     backgroundColor: AppColors.primary,
                     borderRadius: 16,
                     child: Row(

@@ -1,6 +1,14 @@
+import 'dart:developer';
+
+import 'package:evently/core/utils/firebase_services.dart';
+import 'package:evently/core/utils/firestore_services.dart';
 import 'package:evently/core/widget/category_widget.dart';
 import 'package:evently/modules/home_screen/widget/tab_icons.dart';
+import 'package:evently/modules/splash_screen/pages/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../models/event_model.dart';
 import '/core/constant/app_assets.dart';
 import '/core/extensions/extensions.dart';
 import '/core/theme/app_colors.dart';
@@ -20,31 +28,47 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
   int selectedTabIndex = 0;
-
-  List<CategoryWidget> categories = [
-    CategoryWidget(
-      icon: SvgPicture.asset(AppAssets.all),
-      text: "All",
-    ),
-    CategoryWidget(
-      icon: SvgPicture.asset(AppAssets.sports),
-      text: "Sports",
-      isSelected: true,
-      selectedColor: AppColors.whiteColor,
-    ),
+  List<String> category = [
+    "All",
+    "Sports",
+    "Birthday",
+    "Games",
+    "Book Club",
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          var _id = FireStoreServices.generateId(
+            value2: "sports",
+            value1: 'Tech Conference 2023',
+          );
+          EasyLoading.show();
+          EventModel myEvent = EventModel(
+            id: _id,
+            event: 'Tech Conference 2023',
+            isLiked: false,
+            uid: 'user123',
+            category: category[selectedTabIndex],
+            eventDate: DateTime(2023, 12, 15),
+            lantitude: '40.7128',
+            longitude: '-74.0060',
+          );
+          EasyLoading.dismiss();
+          var response = FireStoreServices.addNewEvent(event: myEvent);
+          (response == null)
+              ? log("Data Inserted Succefully")
+              : log(response.toString());
+        },
         backgroundColor: AppColors.secondary,
         shape: CircleBorder(
-            side: BorderSide(
-          color: AppColors.primary,
-          width: 5,
-        )),
+          side: BorderSide(
+            color: AppColors.primary,
+            width: 5,
+          ),
+        ),
         child: Icon(
           Icons.add,
           color: AppColors.primary,
@@ -111,7 +135,7 @@ class _HomeState extends State<Home> {
               child: Expanded(
                 child: DefaultTabController(
                   length: 5,
-                  initialIndex: this.selectedTabIndex,
+                  initialIndex: selectedTabIndex,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -133,7 +157,13 @@ class _HomeState extends State<Home> {
                             height: 35,
                             width: 35,
                             child: CustomElevatedButton(
-                              callBack: () {},
+                              callBack: () {
+                                FirebaseAuthServices.logout();
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  SplashScreen.routeName,
+                                );
+                              },
                               backgroundColor: AppColors.whiteColor,
                               borderRadius: 8,
                               padding: EdgeInsets.zero,
@@ -151,14 +181,16 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       Text(
-                        "Hisham Aymen ",
+                        FirebaseAuth.instance.currentUser!.displayName!
+                                .toUpperCase() ??
+                            "No Name",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
                           color: AppColors.whiteColor,
                         ),
                       ),
-                      0.016.height.verSpace,
+                      0.02.height.verSpace,
                       Row(
                         children: [
                           Icon(

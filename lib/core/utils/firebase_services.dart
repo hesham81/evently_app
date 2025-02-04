@@ -1,4 +1,11 @@
+import 'dart:developer';
+
+import 'package:evently/main.dart';
+import 'package:evently/modules/home_screen/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class FirebaseAuthServices {
   static bool validation = false;
@@ -82,10 +89,38 @@ abstract class FirebaseAuthServices {
   }
 
   static getCurrentUser() {
-    return _firebase.currentUser;
+    User? user = _firebase.currentUser;
+    print((user!.uid == null) ? null : user!.uid);
+    return user == null ? null : user;
   }
 
   static void logout() async {
     await _firebase.signOut();
+  }
+
+  static Future<UserCredential> signInWithGoogle(BuildContext context) async {
+    // EasyLoading.show();
+    await GoogleSignIn().signOut();
+    // _firebase.signOut();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    var userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    // EasyLoading.dismiss();
+    log("The Credential ${userCredential.user!.uid}");
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      Home.routeName,
+      (route) => false,
+    );
+
+    return userCredential;
   }
 }

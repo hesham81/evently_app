@@ -31,15 +31,19 @@ class _SplashScreenState extends State<SplashScreen> {
         Timer(
           Duration(seconds: 3),
           () {
-            (FirebaseAuthServices.getCurrentUser() == null)
-                ? Navigator.pushReplacementNamed(
-                    context,
-                    SignInScreen.routeName,
-                  )
-                : Navigator.pushReplacementNamed(
-                    context,
-                    Home.routeName,
-                  );
+            // (FirebaseAuthServices.getCurrentUser() == null)
+            //     ? Navigator.pushReplacementNamed(
+            //         context,
+            //         SignInScreen.routeName,
+            //       )
+            //     : Navigator.pushReplacementNamed(
+            //         context,
+            //         Home.routeName,
+            //       );
+            Navigator.pushReplacementNamed(
+              context,
+              SignInScreen.routeName,
+            );
           },
         );
       },
