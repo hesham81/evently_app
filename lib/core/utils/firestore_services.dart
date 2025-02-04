@@ -39,22 +39,36 @@ abstract class FireStoreServices {
     String date = "${time.day}-${time.month}-${time.year}";
     value1 = value1.substring(0, 4);
     value2 = value2.substring(0, 4);
-    return "${value1}-${value2}-$date";
+    return "$value1-$value2-$date";
   }
 
-  static getEvents() async {
-    FirebaseFirestore.instance
+  static Future<List<EventModel>> getEvents() async {
+    List<EventModel> events = [];
+    await FirebaseFirestore.instance
         .collection(collectionName)
         .where("uid", isEqualTo: FirebaseAuthServices.getCurrentUser()!.uid)
         .get()
-        .then(
-          (querySnapshot) {
-            log("Successfully Completed");
-            for(var docSnapshot in querySnapshot.docs) {
-              log(docSnapshot.data().toString());
-            }
-          },
-      onError: (error) => log("Failed to complete: $error")
+        .then((querySnapshot) {
+      log("Successfully Completed");
+      for (var docSnapshot in querySnapshot.docs) {
+        events.add(
+          EventModel.fromJson(
+            docSnapshot.data(),
+          ),
         );
+        log(docSnapshot.data().toString());
+        log("Length Of Document ${events.length.toString()}");
+      }
+    }, onError: (error) => log("Failed to complete: $error"));
+    return events;
+  }
+
+  static updateLiked({
+    required String id,
+    required bool isLiked,
+  }) {
+    _firestore.doc(id).update({
+      "isLiked": isLiked,
+    });
   }
 }

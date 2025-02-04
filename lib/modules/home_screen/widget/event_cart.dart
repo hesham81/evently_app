@@ -1,9 +1,17 @@
+import 'package:evently/core/utils/firestore_services.dart';
+
+import '../../../models/event_model.dart';
 import '/core/extensions/extensions.dart';
 import '/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class EventCart extends StatefulWidget {
-  const EventCart({super.key});
+  final EventModel model;
+
+  const EventCart({
+    super.key,
+    required this.model,
+  });
 
   @override
   State<EventCart> createState() => _EventCartState();
@@ -19,10 +27,11 @@ class _EventCartState extends State<EventCart> {
       height: 0.3.height,
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(
-                "assets/images/book.png",
-              ),
-              fit: BoxFit.fitHeight),
+            image: AssetImage(
+              widget.model.imagePath,
+            ),
+            fit: BoxFit.fitHeight,
+          ),
           borderRadius: BorderRadius.circular(16)),
       child: Expanded(
         child: Stack(
@@ -56,7 +65,7 @@ class _EventCartState extends State<EventCart> {
                   children: [
                     0.014.verSpace,
                     Text(
-                      "This is a Birthday Party ",
+                      widget.model.event,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14,
@@ -66,14 +75,18 @@ class _EventCartState extends State<EventCart> {
                     ),
                     Spacer(),
                     GestureDetector(
-                      onTap: (){
-                        (isFav) ? isFav = false : isFav = true;
-                        setState(() {
-
-                        });
+                      onTap: () {
+                        widget.model.isLiked = !(widget.model.isLiked);
+                        FireStoreServices.updateLiked(
+                          id: widget.model.id,
+                          isLiked: widget.model.isLiked,
+                        );
+                        setState(() {});
                       },
                       child: Icon(
-                        (isFav) ? Icons.favorite:Icons.favorite_border,
+                        (widget.model.isLiked)
+                            ? Icons.favorite
+                            : Icons.favorite_border,
                         color: AppColors.secondary,
                       ),
                     ),

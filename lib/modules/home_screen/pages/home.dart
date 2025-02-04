@@ -1,16 +1,14 @@
 import 'dart:developer';
 
-import 'package:evently/core/utils/firebase_services.dart';
 import 'package:evently/core/utils/firestore_services.dart';
-import 'package:evently/core/widget/category_widget.dart';
-import 'package:evently/modules/add_event/pages/add_event.dart';
-import 'package:evently/modules/home_screen/widget/event_cart.dart';
-import 'package:evently/core/widget/tab_icons.dart';
-import 'package:evently/modules/splash_screen/pages/splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../models/event_model.dart';
+import '/core/utils/firebase_services.dart';
+import '/modules/add_event/pages/add_event.dart';
+import '/modules/home_screen/widget/event_cart.dart';
+import '/core/widget/tab_icons.dart';
+import '/modules/splash_screen/pages/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '/core/constant/app_assets.dart';
 import '/core/extensions/extensions.dart';
 import '/core/theme/app_colors.dart';
@@ -37,9 +35,20 @@ class _HomeState extends State<Home> {
     "Games",
     "Book Club",
   ];
+  List<EventModel> data = [];
+  Future<List<EventModel>> events = FireStoreServices.getEvents();
 
   @override
   Widget build(BuildContext context) {
+    events.then((value) {
+      data = [] ;
+      for (var event in value) {
+        data.add(event);
+        log("First Thins is ${event.event}");
+      }
+    });
+    log("Length In The Home Build is ${data.length}");
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -234,7 +243,15 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          EventCart()
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) => EventCart(
+                model: data[index],
+              ),
+              padding: EdgeInsets.all(10),
+              itemCount: data.length  ,
+            ),
+          ),
         ],
       ),
     );

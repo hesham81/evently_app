@@ -4,7 +4,7 @@ class EventModel {
   late String id;
 
   final String event;
-  final bool isLiked;
+   bool isLiked;
 
   final String uid;
 
@@ -29,15 +29,22 @@ class EventModel {
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
+    int eventDateMillis;
+    if (json['eventDate'] is String) {
+      eventDateMillis = int.tryParse(json['eventDate']) ?? 0; // Default to 0 if parsing fails
+    } else if (json['eventDate'] is int) {
+      eventDateMillis = json['eventDate'];
+    } else {
+      eventDateMillis = 0; // Default value if type is unexpected
+    }
+
     return EventModel(
       id: json['id'],
       event: json['event'],
       isLiked: json['isLiked'],
       uid: json['uid'],
       category: json['category'],
-      eventDate: DateTime.fromMillisecondsSinceEpoch(
-        json['eventDate'],
-      ),
+      eventDate: DateTime.fromMillisecondsSinceEpoch(eventDateMillis),
       lantitude: json['latitude'],
       longitude: json['longitude'],
       imagePath: json['imagePath'],
@@ -51,7 +58,7 @@ class EventModel {
       'isLiked': isLiked,
       'uid': FirebaseAuthServices.getCurrentUser()!.uid,
       'category': category,
-      'eventDate': eventDate.millisecondsSinceEpoch.toString(),
+      'eventDate': eventDate.millisecondsSinceEpoch,
       'latitude': lantitude,
       'longitude': longitude,
       'imagePath': imagePath,
