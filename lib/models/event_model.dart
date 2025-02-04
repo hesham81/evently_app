@@ -14,17 +14,20 @@ class EventModel {
   final String? lantitude;
 
   final String? longitude;
+  final String imagePath;
 
   EventModel({
-     required this.id,
+    required this.id,
     required this.event,
-     this.isLiked = false,
+    this.isLiked = false,
     required this.uid,
     required this.category,
     required this.eventDate,
     this.lantitude,
     this.longitude,
+    required this.imagePath,
   });
+
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       id: json['id'],
@@ -32,11 +35,15 @@ class EventModel {
       isLiked: json['isLiked'],
       uid: json['uid'],
       category: json['category'],
-      eventDate: DateTime.parse(json['eventDate']),
+      eventDate: DateTime.fromMillisecondsSinceEpoch(
+        json['eventDate'],
+      ),
       lantitude: json['latitude'],
       longitude: json['longitude'],
+      imagePath: json['imagePath'],
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -44,9 +51,10 @@ class EventModel {
       'isLiked': isLiked,
       'uid': FirebaseAuthServices.getCurrentUser()!.uid,
       'category': category,
-      'eventDate': eventDate.toIso8601String(),
+      'eventDate': eventDate.millisecondsSinceEpoch.toString(),
       'latitude': lantitude,
       'longitude': longitude,
+      'imagePath': imagePath,
     };
   }
 }

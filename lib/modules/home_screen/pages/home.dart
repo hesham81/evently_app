@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:evently/core/utils/firebase_services.dart';
 import 'package:evently/core/utils/firestore_services.dart';
 import 'package:evently/core/widget/category_widget.dart';
+import 'package:evently/modules/home_screen/widget/event_cart.dart';
 import 'package:evently/modules/home_screen/widget/tab_icons.dart';
 import 'package:evently/modules/splash_screen/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,28 +41,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          var _id = FireStoreServices.generateId(
-            value2: "sports",
-            value1: 'Tech Conference 2023',
-          );
-          EasyLoading.show();
-          EventModel myEvent = EventModel(
-            id: _id,
-            event: 'Tech Conference 2023',
-            isLiked: false,
-            uid: 'user123',
-            category: category[selectedTabIndex],
-            eventDate: DateTime(2023, 12, 15),
-            lantitude: '40.7128',
-            longitude: '-74.0060',
-          );
-          EasyLoading.dismiss();
-          var response = FireStoreServices.addNewEvent(event: myEvent);
-          (response == null)
-              ? log("Data Inserted Succefully")
-              : log(response.toString());
-        },
+        onPressed: () {},
         backgroundColor: AppColors.secondary,
         shape: CircleBorder(
           side: BorderSide(
@@ -248,6 +228,7 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
+          EventCart()
         ],
       ),
     );
