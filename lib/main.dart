@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'firebase_options.dart';
+import 'modules/add_event/pages/add_event.dart';
 import 'modules/forget_password/pages/forget_password.dart';
 import 'modules/sign_in_screen/pages/sign_in_screen.dart';
 import 'modules/sign_up_screen/pages/sign_up_screen.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.routeName: (context) => SignUpScreen(),
         Home.routeName: (context) => Home(),
         ForgetPassword.routeName: (context) => ForgetPassword(),
+        AddEvent.routeName: (context) => AddEvent(),
       },
     );
   }

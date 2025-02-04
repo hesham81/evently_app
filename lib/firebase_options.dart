@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:519422718017:android:2edc1dad916bd2042756c0',
     messagingSenderId: '519422718017',
     projectId: 'evently-d3561',
+    databaseURL: 'https://evently-d3561-default-rtdb.firebaseio.com',
     storageBucket: 'evently-d3561.firebasestorage.app',
   );
 
@@ -62,7 +63,10 @@ class DefaultFirebaseOptions {
     appId: '1:519422718017:ios:55b8c5039598afda2756c0',
     messagingSenderId: '519422718017',
     projectId: 'evently-d3561',
+    databaseURL: 'https://evently-d3561-default-rtdb.firebaseio.com',
     storageBucket: 'evently-d3561.firebasestorage.app',
+    androidClientId: '519422718017-1p46nsq6p46q7jdjpam6n04u31bv3mp7.apps.googleusercontent.com',
+    iosClientId: '519422718017-1uiprhc0btk8bsphed0d7dpijt5prmr9.apps.googleusercontent.com',
     iosBundleId: 'com.example.evently',
   );
 

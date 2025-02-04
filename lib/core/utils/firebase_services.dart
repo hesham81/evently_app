@@ -1,10 +1,23 @@
+import 'dart:developer';
+
+import 'package:evently/main.dart';
+import 'package:evently/modules/home_screen/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class FirebaseAuthServices {
   static bool validation = false;
-  static  final _firebase = FirebaseAuth.instance;
+  static final _firebase = FirebaseAuth.instance;
 
-  static Future<UserCredential?> signUp(String email, String password) async {
+  static Future<UserCredential?> signUp({
+    required String email,
+    required String password,
+    String name = '',
+    String phone = '',
+    String imageUrl = '',
+  }) async {
     try {
       final UserCredential userCredential =
           await _firebase.createUserWithEmailAndPassword(
@@ -12,7 +25,8 @@ abstract class FirebaseAuthServices {
         password: password,
       );
       var user = userCredential.user;
-      await user?.sendEmailVerification();
+      user!.updateDisplayName(name);
+      await user.sendEmailVerification();
       validation = true;
       return userCredential; // Return UserCredential for further actions
     } on FirebaseAuthException catch (e) {
@@ -37,7 +51,7 @@ abstract class FirebaseAuthServices {
         email: email,
         password: password,
       );
-      validation = true ;
+      validation = true;
       return userCredential;
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);
@@ -73,7 +87,40 @@ abstract class FirebaseAuthServices {
       print('An unexpected Firebase error occurred: ${e.code}');
     }
   }
-  static getCurrentUser() {
-    return  _firebase.currentUser;
+
+  static User? getCurrentUser() {
+    User? user = _firebase.currentUser;
+    print((user!.uid == null) ? null : user!.uid);
+    return user == null ? null : user;
+  }
+
+  static void logout() async {
+    await _firebase.signOut();
+  }
+
+  static Future<UserCredential> signInWithGoogle(BuildContext context) async {
+    // EasyLoading.show();
+    await GoogleSignIn().signOut();
+    // _firebase.signOut();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    var userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    // EasyLoading.dismiss();
+    log("The Credential ${userCredential.user!.uid}");
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      Home.routeName,
+      (route) => false,
+    );
+
+    return userCredential;
   }
 }
