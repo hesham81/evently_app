@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class FirebaseServices {
+abstract class FirebaseAuthServices {
   static bool validation = false;
+  static  final _firebase = FirebaseAuth.instance;
 
   static Future<UserCredential?> signUp(String email, String password) async {
     try {
       final UserCredential userCredential =
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await _firebase.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -31,27 +32,27 @@ abstract class FirebaseServices {
 
   static Future<UserCredential?> signIn(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      validation = true;
-
-      return userCredential; // Return UserCredential for further actions
+      UserCredential? userCredential =
+          await _firebase.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      validation = true ;
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);
       validation = false;
 
-      return null; // Indicate failure
+      // return null;
     } catch (e) {
       validation = false;
-
-      print(e); // Log other unexpected errors
-      return null;
     }
+    return null;
   }
 
   static forgetPassword(String email) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      await _firebase.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);
     } catch (e) {
@@ -71,5 +72,8 @@ abstract class FirebaseServices {
     } else {
       print('An unexpected Firebase error occurred: ${e.code}');
     }
+  }
+  static getCurrentUser() {
+    return  _firebase.currentUser;
   }
 }

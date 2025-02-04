@@ -1,5 +1,11 @@
+import 'dart:async';
+
 import 'package:evently/core/constant/app_assets.dart';
-import 'package:evently/core/extensions/center.dart';
+import 'package:evently/core/services/shared_preferences_services.dart';
+import 'package:evently/core/utils/firebase_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../home_screen/pages/home.dart';
+import '/core/constant/shared_preferences_key.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -18,13 +24,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        SignInScreen.routeName,
-        (route) => false,
-      );
-    });
+    SharedPreferencesServices.init();
+    Future.delayed(
+      const Duration(seconds: 3),
+      () async {
+        Timer(
+          Duration(seconds: 3),
+          () {
+            (FirebaseAuthServices.getCurrentUser() == null)
+                ? Navigator.pushReplacementNamed(
+                    context,
+                    SignInScreen.routeName,
+                  )
+                : Navigator.pushReplacementNamed(
+                    context,
+                    Home.routeName,
+                  );
+          },
+        );
+      },
+    );
   }
 
   @override

@@ -98,7 +98,7 @@ class SignUpScreen extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         EasyLoading.show();
                         UserCredential? userCredential =
-                            await FirebaseServices.signUp(emailController.text,
+                            await FirebaseAuthServices.signUp(emailController.text,
                                     passwordController.text)
                                 .then(
                           (value) {
@@ -106,7 +106,7 @@ class SignUpScreen extends StatelessWidget {
                           },
                         );
 
-                        if (userCredential != null) {
+                        if (userCredential == null) {
                           SnackBarService.showSuccessMessage(
                               "Account Created Successfully");
                           Navigator.pop(context);
