@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:evently/core/utils/firebase_services.dart';
 import 'package:evently/core/utils/firestore_services.dart';
 import 'package:evently/core/widget/category_widget.dart';
+import 'package:evently/modules/add_event/pages/add_event.dart';
 import 'package:evently/modules/home_screen/widget/event_cart.dart';
-import 'package:evently/modules/home_screen/widget/tab_icons.dart';
+import 'package:evently/core/widget/tab_icons.dart';
 import 'package:evently/modules/splash_screen/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -41,7 +42,12 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            AddEvent.routeName,
+          );
+        },
         backgroundColor: AppColors.secondary,
         shape: CircleBorder(
           side: BorderSide(

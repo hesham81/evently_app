@@ -7,6 +7,10 @@ abstract class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       centerTitle: true,
+      iconTheme: IconThemeData(
+        color: AppColors.secondary,
+      ),
+
     ),
   );
 }

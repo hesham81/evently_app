@@ -27,11 +27,11 @@ class TabIcons extends StatefulWidget {
 
   const TabIcons.createEvent({
     super.key,
-    this.btnColor,
-    this.borderColor,
+    this.btnColor ,
+    this.borderColor = Colors.blue,
     this.isSelected = false,
-    this.selectedColor,
-    this.unSelectedColor,
+    this.selectedColor = Colors.white,
+    this.unSelectedColor = Colors.blue,
     required this.icon,
     required this.text,
     this.callback,
@@ -48,8 +48,8 @@ class _TabIconsState extends State<TabIcons> {
       onPressed: widget.callback,
       style: ElevatedButton.styleFrom(
         backgroundColor: (widget.isSelected)
-            ? widget.selectedColor
-            : widget.btnColor ?? AppColors.secondary,
+            ? widget.btnColor
+            : widget.selectedColor ,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(

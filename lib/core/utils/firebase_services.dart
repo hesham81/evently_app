@@ -88,7 +88,7 @@ abstract class FirebaseAuthServices {
     }
   }
 
-  static getCurrentUser() {
+  static User? getCurrentUser() {
     User? user = _firebase.currentUser;
     print((user!.uid == null) ? null : user!.uid);
     return user == null ? null : user;

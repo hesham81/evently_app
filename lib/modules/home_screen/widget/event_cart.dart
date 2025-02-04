@@ -1,6 +1,5 @@
-import 'package:evently/core/extensions/dimensions.dart';
-import 'package:evently/core/extensions/extensions.dart';
-import 'package:evently/core/theme/app_colors.dart';
+import '/core/extensions/extensions.dart';
+import '/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class EventCart extends StatefulWidget {

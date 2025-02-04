@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evently/core/utils/firebase_services.dart';
 
 import '../../models/event_model.dart';
 
@@ -39,5 +40,21 @@ abstract class FireStoreServices {
     value1 = value1.substring(0, 4);
     value2 = value2.substring(0, 4);
     return "${value1}-${value2}-$date";
+  }
+
+  static getEvents() async {
+    FirebaseFirestore.instance
+        .collection(collectionName)
+        .where("uid", isEqualTo: FirebaseAuthServices.getCurrentUser()!.uid)
+        .get()
+        .then(
+          (querySnapshot) {
+            log("Successfully Completed");
+            for(var docSnapshot in querySnapshot.docs) {
+              log(docSnapshot.data().toString());
+            }
+          },
+      onError: (error) => log("Failed to complete: $error")
+        );
   }
 }
