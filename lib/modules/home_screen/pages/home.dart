@@ -1,4 +1,5 @@
 import 'package:evently/core/widget/category_widget.dart';
+import 'package:evently/modules/home_screen/widget/tab_icons.dart';
 
 import '/core/constant/app_assets.dart';
 import '/core/extensions/extensions.dart';
@@ -18,6 +19,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
+  int selectedTabIndex = 0;
 
   List<CategoryWidget> categories = [
     CategoryWidget(
@@ -95,7 +97,134 @@ class _HomeState extends State<Home> {
         ],
         type: BottomNavigationBarType.fixed,
       ),
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.secondary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: SafeArea(
+              child: Expanded(
+                child: DefaultTabController(
+                  length: 5,
+                  initialIndex: this.selectedTabIndex,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Welcome Back",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                          Spacer(),
+                          SvgPicture.asset(AppAssets.sun),
+                          0.02.verSpace,
+                          SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: CustomElevatedButton(
+                              callBack: () {},
+                              backgroundColor: AppColors.whiteColor,
+                              borderRadius: 8,
+                              padding: EdgeInsets.zero,
+                              child: Text(
+                                "EN",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          0.01.verSpace,
+                        ],
+                      ),
+                      Text(
+                        "Hisham Aymen ",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                      0.016.height.verSpace,
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: AppColors.whiteColor,
+                          ),
+                          Text(
+                            "Cairo , Egypt",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TabBar(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        isScrollable: true,
+                        indicatorColor: Colors.transparent,
+                        dividerColor: Colors.transparent,
+                        tabAlignment: TabAlignment.start,
+                        onTap: _onTabClicked,
+                        tabs: [
+                          TabIcons.home(
+                            icon: Icons.all_inclusive_outlined,
+                            text: "All",
+                            isSelected: (selectedTabIndex == 0),
+                          ),
+                          TabIcons.home(
+                            icon: Icons.directions_bike_sharp,
+                            text: "Sports",
+                            isSelected: (selectedTabIndex == 1),
+                          ),
+                          TabIcons.home(
+                            icon: Icons.cake_outlined,
+                            text: "Birthday",
+                            isSelected: (selectedTabIndex == 2),
+                          ),
+                          TabIcons.home(
+                            icon: Icons.gamepad,
+                            text: "Games",
+                            isSelected: (selectedTabIndex == 3),
+                          ),
+                          TabIcons.home(
+                            icon: Icons.menu_book_sharp,
+                            text: "Book Club",
+                            isSelected: (selectedTabIndex == 4),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ).allPadding(0.01.height),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  _onTabClicked(int index) {
+    setState(() {
+      selectedTabIndex = index;
+    });
   }
 
   _onTap(int index) {

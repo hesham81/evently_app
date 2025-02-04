@@ -98,9 +98,11 @@ class SignUpScreen extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         EasyLoading.show();
                         UserCredential? userCredential =
-                            await FirebaseAuthServices.signUp(emailController.text,
-                                    passwordController.text)
-                                .then(
+                            await FirebaseAuthServices.signUp(
+                          password: passwordController.text,
+                          email: emailController.text,
+                          name: nameController.text,
+                        ).then(
                           (value) {
                             EasyLoading.dismiss();
                           },

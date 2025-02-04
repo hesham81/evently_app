@@ -2,9 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class FirebaseAuthServices {
   static bool validation = false;
-  static  final _firebase = FirebaseAuth.instance;
+  static final _firebase = FirebaseAuth.instance;
 
-  static Future<UserCredential?> signUp(String email, String password) async {
+  static Future<UserCredential?> signUp({
+    required String email,
+    required String password,
+    String name = '',
+    String phone = '',
+    String imageUrl = '',
+  }) async {
     try {
       final UserCredential userCredential =
           await _firebase.createUserWithEmailAndPassword(
@@ -12,7 +18,8 @@ abstract class FirebaseAuthServices {
         password: password,
       );
       var user = userCredential.user;
-      await user?.sendEmailVerification();
+      user!.updateDisplayName(name);
+      await user.sendEmailVerification();
       validation = true;
       return userCredential; // Return UserCredential for further actions
     } on FirebaseAuthException catch (e) {
@@ -37,7 +44,7 @@ abstract class FirebaseAuthServices {
         email: email,
         password: password,
       );
-      validation = true ;
+      validation = true;
       return userCredential;
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthException(e);
@@ -73,7 +80,12 @@ abstract class FirebaseAuthServices {
       print('An unexpected Firebase error occurred: ${e.code}');
     }
   }
+
   static getCurrentUser() {
-    return  _firebase.currentUser;
+    return _firebase.currentUser;
+  }
+
+  static void logout() async {
+    await _firebase.signOut();
   }
 }
