@@ -15,6 +15,8 @@ class CustomTextFormField extends StatefulWidget {
   final TextStyle? hintStyle;
   final TextEditingController? controller;
   final validation? validator;
+  final int maxLine;
+  final validation? onChanged;
 
   const CustomTextFormField({
     super.key,
@@ -27,6 +29,8 @@ class CustomTextFormField extends StatefulWidget {
     this.hintStyle,
     this.controller,
     this.validator,
+    this.maxLine = 1,
+    this.onChanged,
   });
 
   @override
@@ -39,6 +43,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: widget.maxLine,
+      onChanged: widget.onChanged,
       validator: widget.validator,
       controller: widget.controller,
       obscureText: (widget.isPassword) ? visible : false,
@@ -114,13 +120,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 ),
                 color: AppColors.greyColor.withAlpha(180),
               ).allPadding(9)
-            : widget.prefixIcon ??
-                ImageIcon(
-                  AssetImage(
-                    AppAssets.email,
-                  ),
-                  color: AppColors.greyColor.withAlpha(180),
-                ).allPadding(9),
+            : widget.prefixIcon,
       ),
     );
   }
