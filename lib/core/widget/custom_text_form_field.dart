@@ -16,6 +16,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final validation? validator;
   final int maxLine;
+  final validation? onChanged;
 
   const CustomTextFormField({
     super.key,
@@ -28,7 +29,8 @@ class CustomTextFormField extends StatefulWidget {
     this.hintStyle,
     this.controller,
     this.validator,
-     this.maxLine = 1 ,
+    this.maxLine = 1,
+    this.onChanged,
   });
 
   @override
@@ -42,6 +44,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       maxLines: widget.maxLine,
+      onChanged: widget.onChanged,
       validator: widget.validator,
       controller: widget.controller,
       obscureText: (widget.isPassword) ? visible : false,

@@ -1,20 +1,10 @@
-import 'dart:developer';
-
-import 'package:evently/core/utils/firestore_services.dart';
-
-import '../../../models/event_model.dart';
-import '/core/utils/firebase_services.dart';
+import '/modules/home_screen/pages/fav_page.dart';
+import '/modules/home_screen/pages/home_tab.dart';
+import '/modules/home_screen/pages/maps.dart';
+import '/modules/home_screen/pages/profile.dart';
 import '/modules/add_event/pages/add_event.dart';
-import '/modules/home_screen/widget/event_cart.dart';
-import '/core/widget/tab_icons.dart';
-import '/modules/splash_screen/pages/splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '/core/constant/app_assets.dart';
-import '/core/extensions/extensions.dart';
 import '/core/theme/app_colors.dart';
-import '/core/widget/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/home';
@@ -26,8 +16,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  var pages = [
+    HomeTab(),
+    Maps(),
+    FavPage(),
+    Profile(),
+  ];
   int selectedIndex = 0;
-  int selectedTabIndex = 0;
   List<String> category = [
     "All",
     "Sports",
@@ -35,20 +30,9 @@ class _HomeState extends State<Home> {
     "Games",
     "Book Club",
   ];
-  List<EventModel> data = [];
-  Future<List<EventModel>> events = FireStoreServices.getEvents();
 
   @override
   Widget build(BuildContext context) {
-    events.then((value) {
-      data = [] ;
-      for (var event in value) {
-        data.add(event);
-        log("First Thins is ${event.event}");
-      }
-    });
-    log("Length In The Home Build is ${data.length}");
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -116,151 +100,8 @@ class _HomeState extends State<Home> {
         ],
         type: BottomNavigationBarType.fixed,
       ),
-      body: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-            child: SafeArea(
-              child: Expanded(
-                child: DefaultTabController(
-                  length: 5,
-                  initialIndex: selectedTabIndex,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Welcome Back",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                          Spacer(),
-                          SvgPicture.asset(AppAssets.sun),
-                          0.02.verSpace,
-                          SizedBox(
-                            height: 35,
-                            width: 35,
-                            child: CustomElevatedButton(
-                              callBack: () {
-                                FirebaseAuthServices.logout();
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  SplashScreen.routeName,
-                                );
-                              },
-                              backgroundColor: AppColors.whiteColor,
-                              borderRadius: 8,
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                "EN",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.secondary,
-                                ),
-                              ),
-                            ),
-                          ),
-                          0.01.verSpace,
-                        ],
-                      ),
-                      Text(
-                        FirebaseAuth.instance.currentUser!.displayName!
-                                .toUpperCase() ??
-                            "No Name",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.whiteColor,
-                        ),
-                      ),
-                      0.02.height.verSpace,
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: AppColors.whiteColor,
-                          ),
-                          Text(
-                            "Cairo , Egypt",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      TabBar(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        isScrollable: true,
-                        indicatorColor: Colors.transparent,
-                        dividerColor: Colors.transparent,
-                        tabAlignment: TabAlignment.start,
-                        onTap: _onTabClicked,
-                        tabs: [
-                          TabIcons.home(
-                            icon: Icons.all_inclusive_outlined,
-                            text: "All",
-                            isSelected: (selectedTabIndex == 0),
-                          ),
-                          TabIcons.home(
-                            icon: Icons.directions_bike_sharp,
-                            text: "Sports",
-                            isSelected: (selectedTabIndex == 1),
-                          ),
-                          TabIcons.home(
-                            icon: Icons.cake_outlined,
-                            text: "Birthday",
-                            isSelected: (selectedTabIndex == 2),
-                          ),
-                          TabIcons.home(
-                            icon: Icons.gamepad,
-                            text: "Games",
-                            isSelected: (selectedTabIndex == 3),
-                          ),
-                          TabIcons.home(
-                            icon: Icons.menu_book_sharp,
-                            text: "Book Club",
-                            isSelected: (selectedTabIndex == 4),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ).allPadding(0.01.height),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) => EventCart(
-                model: data[index],
-              ),
-              padding: EdgeInsets.all(10),
-              itemCount: data.length  ,
-            ),
-          ),
-        ],
-      ),
+      body: pages[selectedIndex],
     );
-  }
-
-  _onTabClicked(int index) {
-    setState(() {
-      selectedTabIndex = index;
-    });
   }
 
   _onTap(int index) {
