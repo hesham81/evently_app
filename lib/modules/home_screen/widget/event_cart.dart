@@ -64,16 +64,18 @@ class _EventCartState extends State<EventCart> {
                 child: Row(
                   children: [
                     0.014.verSpace,
-                    Text(
-                      widget.model.event,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.blackColor,
+                    Expanded(
+                      child: Text(
+                        widget.model.event,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.blackColor,
+                        ),
                       ),
                     ),
-                    Spacer(),
+                    Expanded(child: Spacer()),
                     GestureDetector(
                       onTap: () {
                         widget.model.isLiked = !(widget.model.isLiked);
